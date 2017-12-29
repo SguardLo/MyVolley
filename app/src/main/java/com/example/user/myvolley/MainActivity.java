@@ -30,21 +30,26 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                RequestQueue rq = Volley.newRequestQueue(MainActivity.this);
+                final RequestQueue rq = Volley.newRequestQueue(MainActivity.this);
                 StringRequest srq = new StringRequest(Request.Method.POST,
                         "http://172.16.0.182:8080/jsonapp.json",
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-
+                                textView1.setText(response);
+                                rq.stop();
                             }
                         },
                         new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        textView1.setText("Something went wrong");
+                        error.printStackTrace();
+                        rq.stop();
                     }
                 });
+
+                rq.add(srq);
             }
         });
     }
